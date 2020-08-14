@@ -1,0 +1,27 @@
+server:
+  port: 8091
+  tomcat:
+    max-threads: 10
+
+spring:
+  application:
+    name: service-order
+  datasource:
+    driver-class-name: com.mysql.jdbc.Driver
+    url: jdbc:mysql://192.168.2.129:3306/shop?serverTimezone=UTC&useUnicode=true&characterEncoding=utf-8&useSSL=true
+    username: root
+    password: 123456
+  jpa:
+    properties:
+      hibernate:
+        hbm2ddl:
+          auto: update
+        dialect: org.hibernate.dialect.MySQL5InnoDBDialect
+  cloud:
+    sentinel:
+      transport:
+        dashboard: 192.168.2.129:8080
+        port: 8719
+    nacos:
+      discovery:
+        server-addr: 192.168.2.129:8848
