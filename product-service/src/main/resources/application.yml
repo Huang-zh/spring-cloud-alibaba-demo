@@ -1,6 +1,10 @@
 server:
   port: 8081
 
+feign:
+  sentinel:
+    enabled: true
+
 spring:
   application:
     name: service-product

@@ -3,6 +3,11 @@ server:
   tomcat:
     max-threads: 10
 
+feign:
+  sentinel:
+    enabled: true
+
+
 spring:
   application:
     name: service-order
@@ -20,8 +25,8 @@ spring:
   cloud:
     sentinel:
       transport:
+        port: 9999 #注意，sentinel默认懒加载，需要第一次访问微服务之后才会被注册到sentinel控制台进行实时监控
         dashboard: 127.0.0.1:8080
-        port: 8719
     nacos:
       discovery:
         server-addr: 127.0.0.1:8848
