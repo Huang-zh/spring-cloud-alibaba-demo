@@ -1,0 +1,21 @@
+server:
+  port: 7000
+
+spring:
+  application:
+    name: api-gateway
+  cloud:
+    nacos:
+      discovery:
+        server-addr: 127.0.0.1:8848
+    gateway:
+      discovery: #从nacos server自动拉取服务，外部只需要通过'网关ip+端口/微服务实例id/接口'的形式访问即可
+        locator:
+          enabled: true
+      routes:
+        - id: service-order
+          uri: lb://service-order  # lb指的是从nacos中按照名称获取微服务,并遵循负载均衡策略
+          predicates:
+            - Path=/huang/** #转发所有以/huang开头的请求至uri（将huang替换成service-order）
+          filters:
+            - StripPrefix=1

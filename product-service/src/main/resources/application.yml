@@ -1,10 +1,6 @@
 server:
   port: 8081
 
-feign:
-  sentinel:
-    enabled: true
-
 spring:
   application:
     name: service-product
@@ -20,6 +16,10 @@ spring:
           auto: update
         dialect: org.hibernate.dialect.MySQL5InnoDBDialect
   cloud:
+    sentinel:
+      transport:
+        port: 9998 #注意，sentinel默认懒加载，需要第一次访问微服务之后才会被注册到sentinel控制台进行实时监控
+        dashboard: 127.0.0.1:8080
     nacos:
       discovery:
         server-addr: 127.0.0.1:8848

@@ -1,5 +1,7 @@
 package com.huang.order.controller;
 
+import com.alibaba.csp.sentinel.annotation.SentinelResource;
+import com.alibaba.csp.sentinel.slots.block.BlockException;
 import com.huang.entity.Order;
 import com.huang.entity.Product;
 import com.huang.order.api.ProductClient;
@@ -89,8 +91,40 @@ public class OrderController {
 //        orderService.saveEntity(order);
         return order;
     }
+
     @GetMapping("test")
+    @SentinelResource(value = "test",blockHandler = "testBlockHandler",fallback = "fallback")
     public String test(){
+//        int i = 1/0;
         return "test";
+    }
+
+    public String testBlockHandler(BlockException ex){
+        ex.printStackTrace();
+        return "testRollback";
+    }
+
+    public String fallback(Throwable throwable) {
+        throwable.printStackTrace();
+        return "接口发生异常了...";
+    }
+
+    @GetMapping("testOfFeign/{pid}")
+    public Object testOfFeign(@PathVariable Integer pid){
+        Product product = productClient.getByID(pid);
+        try {
+            Thread.sleep(100);
+        }catch (InterruptedException e){
+            e.printStackTrace();
+        }
+        Order order = new Order();
+        order.setUid(1);
+        order.setUsername("测试用户");
+        order.setPid(product.getPid());
+        order.setPname(product.getPname());
+        order.setPprice(product.getPprice());
+        order.setNumber(1);
+//        orderService.saveEntity(order);
+        return order;
     }
 }

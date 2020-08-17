@@ -7,7 +7,6 @@ feign:
   sentinel:
     enabled: true
 
-
 spring:
   application:
     name: service-order
