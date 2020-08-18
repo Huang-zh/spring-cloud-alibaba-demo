@@ -17,5 +17,6 @@ spring:
           uri: lb://service-order  # lb指的是从nacos中按照名称获取微服务,并遵循负载均衡策略
           predicates:
             - Path=/huang/** #转发所有以/huang开头的请求至uri（将huang替换成service-order）
+            - UserName=Huang-zh #规定userName参数为Huang-zh时才可以访问订单微服务
           filters:
             - StripPrefix=1
