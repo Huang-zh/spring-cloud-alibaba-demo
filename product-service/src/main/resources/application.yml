@@ -29,3 +29,10 @@ spring:
   sleuth:
     sampler:
       probability: 1.0  #采样的百分比
+
+mq:
+  config:
+    messageProducerGroup: default-producer-group
+    messageConsumerGroup: default-consumer-group
+    nameServerHost: 127.0.0.1
+    nameServerPort: 9876

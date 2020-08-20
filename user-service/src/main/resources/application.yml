@@ -14,3 +14,5 @@ spring:
         hbm2ddl:
           auto: update
         dialect: org.hibernate.dialect.MySQL5InnoDBDialect
+rocketmq:
+  name-server: 127.0.0.1:9876

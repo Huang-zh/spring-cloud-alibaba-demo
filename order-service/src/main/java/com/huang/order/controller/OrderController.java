@@ -6,6 +6,7 @@ import com.huang.entity.Order;
 import com.huang.entity.Product;
 import com.huang.order.api.ProductClient;
 import com.huang.order.service.OrderService;
+import org.apache.rocketmq.spring.core.RocketMQTemplate;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cloud.client.ServiceInstance;
 import org.springframework.cloud.client.discovery.DiscoveryClient;
@@ -35,6 +36,9 @@ public class OrderController {
 
     @Autowired
     private OrderService orderService;
+
+    @Autowired
+    private RocketMQTemplate rocketMQTemplate;
 
     //准备买1件商品
     @GetMapping("/order/prod/{pid}")
@@ -89,6 +93,7 @@ public class OrderController {
         order.setPprice(product.getPprice());
         order.setNumber(1);
 //        orderService.saveEntity(order);
+        rocketMQTemplate.convertAndSend("order-topic",order);
         return order;
     }
 
