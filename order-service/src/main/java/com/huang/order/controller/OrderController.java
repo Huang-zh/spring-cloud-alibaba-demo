@@ -6,6 +6,8 @@ import com.huang.entity.Order;
 import com.huang.entity.Product;
 import com.huang.order.api.ProductClient;
 import com.huang.order.service.OrderService;
+import org.apache.rocketmq.client.producer.SendCallback;
+import org.apache.rocketmq.client.producer.SendResult;
 import org.apache.rocketmq.spring.core.RocketMQTemplate;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cloud.client.ServiceInstance;
@@ -92,8 +94,21 @@ public class OrderController {
         order.setPname(product.getPname());
         order.setPprice(product.getPprice());
         order.setNumber(1);
-//        orderService.saveEntity(order);
-        rocketMQTemplate.convertAndSend("order-topic",order);
+        //orderService.saveEntity(order);
+        //向broker发送消息，该方法默认发送同步消息，在收到消费者回应之前并不会发送后续的消息
+        //rocketMQTemplate.convertAndSend("order-topic",order);
+        //异步发送
+        rocketMQTemplate.asyncSend("order-topic", order, new SendCallback() {
+            @Override
+            public void onSuccess(SendResult sendResult) {
+                System.out.println(sendResult.toString());
+            }
+
+            @Override
+            public void onException(Throwable throwable) {
+                throwable.printStackTrace();
+            }
+        });
         return order;
     }
 
